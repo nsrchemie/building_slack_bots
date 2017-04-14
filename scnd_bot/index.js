@@ -8,3 +8,7 @@ const bot = new Bot({
   autoReconnect: true,
   autoMark: true
  });
+
+bot.respondTo('hello', (message, channel, user) => {
+  bot.send(`Hello to you too, ${user.name}!`, channel)
+}, true);
