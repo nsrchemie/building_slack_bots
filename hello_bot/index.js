@@ -13,6 +13,28 @@ let slack = new RtmClient(token, {
   autoMark: true
 });
 
+slack.on(RTM_EVENTS.MESSAGE, (message) => {
+  let user = slack.dataStore.getUserById(message.user);
+
+if (user && user.is_bot) {
+  return;
+}
+
+let channel = slack.dataStore.getChannelGroupOrDMById(message.channel);
+
+if (message.text) {
+ let msg = message.text.toLowerCase();
+
+if (/(hello|hi) (bot|firsty)/g.test(msg)) {
+  slack.sendMessage(`Hello to you too ${user.name}`, channel.id);
+  }
+ }
+});
+
+
+
+
+
 slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () =>
 { let user = slack.dataStore.getUserById(slack.activeUserId);
   let team = slack.dataStore.getTeamById(slack.activateTeamId);
@@ -39,7 +61,7 @@ let memberNames = members.map((member) => {
 console.log('Members of Channel:', memberNames);
 
 
-slack.sendMessage(`Hello ${memberNames}!`, channel.id);
+//slack.sendMessage(`Hello ${memberNames}!`, channel.id);
 });
 });
 
