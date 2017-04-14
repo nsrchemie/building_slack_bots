@@ -19,24 +19,34 @@ slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () =>
 
 let channels = getChannels(slack.dataStore.channels);
 
+let channelNames = channels.map((channel) => {
+ return channel.name;
+}).join(', ');
+console.log(`Currently in ${channelNames} under the name ${user.name}`);
+
 channels.forEach((channel) => {
-let members = channel.members.map((id) => {
- return slack.dataStore.getUserById(id);
+   let members = channel.members.map((id) => {
+     return slack.dataStore.getUserById(id);
 });
+
+members = members.filter((member) => {
+return !member.is_bot;
+});
+
 let memberNames = members.map((member) => {
  return member.name;
 }).join(', ');
 console.log('Members of Channel:', memberNames);
+
+
+slack.sendMessage(`Hello ${memberNames}!`, channel.id);
 });
-
-let channelNames = channels.map((channel) => {
- return channel.name;
-}).join(', ');
-
-console.log(`Currently in ${channelNames} under the name ${user.name}`);
 });
 
 slack.start();
+
+
+
 
 function getChannels(allChannels) {
  let channels = [];
@@ -48,6 +58,5 @@ if (channel.is_member) {
  channels.push(channel);
  }
 }
-
 return channels;
 }
