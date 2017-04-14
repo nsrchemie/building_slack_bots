@@ -19,6 +19,16 @@ slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () =>
 
 let channels = getChannels(slack.dataStore.channels);
 
+channels.forEach((channel) => {
+let members = channel.members.map((id) => {
+ return slack.dataStore.getUserById(id);
+});
+let memberNames = members.map((member) => {
+ return member.name;
+}).join(', ');
+console.log('Members of Channel:', memberNames);
+});
+
 let channelNames = channels.map((channel) => {
  return channel.name;
 }).join(', ');
