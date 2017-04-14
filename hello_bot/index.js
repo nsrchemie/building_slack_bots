@@ -28,6 +28,17 @@ if (message.text) {
 if (/(hello|hi) (bot|firsty)/g.test(msg)) {
   slack.sendMessage(`Hello to you too ${user.name}`, channel.id);
   }
+
+if (/uptime/g.test(msg)) {
+  let dm = slack.dataStore.getDMByName(user.name);
+  let uptime = process.uptime();
+  let minutes = parseInt(uptime / 60, 10),
+  hours = parseInt(minutes / 60, 10),
+  seconds = parseInt(uptime - (minutes * 60) - ((hours * 60) *60), 10);
+
+slack.sendMessage(`I have been running for ${hours} hours, ${minutes} minutes and ${seconds} seconds.`, dm.id);
+}
+
  }
 });
 
